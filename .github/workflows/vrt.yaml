@@ -28,7 +28,7 @@ jobs:
 
       - run: npm run build-storybook
 
-      - uses: sgash708/chromagic@perf/storycap-parallel
+      - uses: sgash708/chromagic@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           viewport: "390x844,1280x800"
