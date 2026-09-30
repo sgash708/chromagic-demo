@@ -1,0 +1,36 @@
+name: Page VRT
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: vrt-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  vrt-pages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm ci
+
+      - uses: sgash708/chromagic@worktree-chromagic+page-vrt-approval
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          storybook: "false"
+          pages-start-command: "npm run dev -- --port 4173"
+          pages-base-url: "http://localhost:4173"
+          pages-config: "chromagic.pages.json"
